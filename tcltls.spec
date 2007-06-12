@@ -1,10 +1,13 @@
+%define name tcltls
+%define version 1.5.0
+%define release %mkrel 3
 %define major 1.50
 %define libname %mklibname tcltls %{major}
 
 Summary: 	SSL2, SSL3, and TLS1 encryption extensions for TCL
-Name: 		tcltls
-Version: 	1.5.0
-Release: 	%mkrel 2
+Name: 		%{name}
+Version: 	%{version}
+Release: 	%{release}
 License: 	BSD
 Group: 		System/Libraries
 URL: 		http://tls.sourceforge.net/
@@ -55,6 +58,10 @@ Needed for Sguild
 %patch1 -p1 -b .openssl098a
 
 %build
+
+# Fixes AMSN with TCL/TK 8.5: from http://www.amsn-project.net/wiki/FAQ
+# AdamW 2007/06
+perl -pi -e 's,1.5,1.50,g' pkgIndex.tcl.in
 
 %configure2_5x \
     --enable-shared \
