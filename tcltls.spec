@@ -21,7 +21,6 @@ BuildRequires:	tcl-devel
 BuildRequires:	openssl-devel
 Requires:	tcl >= 8.4.11
 Requires:	openssl
-BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-buildroot
 
 %description 
 Provides SSL2, SSL3, and TLS1 socket encryption functionality
