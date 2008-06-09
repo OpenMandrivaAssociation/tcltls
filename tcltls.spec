@@ -88,9 +88,13 @@ install -m0644 tls.h %{buildroot}%{_includedir}/tls%{major}/
 install -m0644 pkgIndex.tcl %{buildroot}%{_libdir}/tls%{major}/
 install -m0644 tls.tcl %{buildroot}%{_libdir}/tls%{major}/
 
+%if %mdkversion < 200900
 %post -n %{libname} -p /sbin/ldconfig
+%endif
 
+%if %mdkversion < 200900
 %postun -n %{libname} -p /sbin/ldconfig
+%endif
 
 %clean
 [ -n "%{buildroot}" -a "%{buildroot}" != / ] && rm -rf %{buildroot}
