@@ -1,6 +1,6 @@
 %define name tcltls
 %define version 1.5.0
-%define release %mkrel 5
+%define release %mkrel 6
 %define major 1.50
 %define libname %mklibname tcltls %{major}
 
