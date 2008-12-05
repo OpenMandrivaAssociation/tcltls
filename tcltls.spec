@@ -1,26 +1,19 @@
-%define name tcltls
-%define version 1.5.0
-%define release %mkrel 6
-%define major 1.50
-%define libname %mklibname tcltls %{major}
-
 Summary: 	SSL2, SSL3, and TLS1 encryption extensions for TCL
-Name: 		%{name}
-Version: 	%{version}
-Release: 	%{release}
+Name: 		tcltls
+Version: 	1.6
+Release: 	%{mkrel 1}
 License: 	BSD
 Group: 		System/Libraries
 URL: 		http://tls.sourceforge.net/
-Source0:	http://prdownloads.sourceforge.net/tls/tls%{version}-src.tar.bz2
-Patch0:		tcltls_1.5.0-2.diff
-Patch1:		amsn-0.95-tls1.5-1.5.0-engine.diff
-BuildRequires:	autoconf2.5
-BuildRequires:	automake1.7
-BuildRequires:	tcl
+Source0:	http://downloads.sourceforge.net/tls/tls%{version}-src.tar.gz
+Patch0:		tcltls-1.6-simpleclient.patch
+Patch1:		tcltls-1.6-openssl.patch
+Patch2:		tcltls-1.6-no-rpath.patch
 BuildRequires:	tcl-devel
 BuildRequires:	openssl-devel
 Requires:	tcl >= 8.4.11
 Requires:	openssl
+Obsoletes:	%{mklibname tcltls 1.50}
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-buildroot
 
 %description 
@@ -28,41 +21,24 @@ Provides SSL2, SSL3, and TLS1 socket encryption functionality
 to the TCL interpreted language.
 Needed for Sguild
 
-%package -n	%{libname}
+%package	devel
 Summary:	SSL2, SSL3, and TLS1 encryption extensions for TCL
-Group:		System/Libraries
-Requires:	tcl >= 8.4.11
-Requires:	openssl
+Group:		Development/Other
+Requires:	%{name} = %{version}-%{release}
+Obsoletes:	%{mklibname tcltls 1.50 -d}
 
-%description -n	%{libname}
+%description	devel
 Provides SSL2, SSL3, and TLS1 socket encryption functionality
-to the TCL interpreted language.
-Needed for Sguild
-
-%package -n	%{libname}-devel
-Summary:	SSL2, SSL3, and TLS1 encryption extensions for TCL
-Group:		System/Libraries
-Requires:	%{libname} = %{version}-%{release}
-Provides:	lib%{name}-devel %{name}-devel
-Obsoletes:	lib%{name}-devel %{name}-devel
-
-%description -n	%{libname}-devel
-Provides SSL2, SSL3, and TLS1 socket encryption functionality
-to the TCL interpreted language.
-Needed for Sguild
+to the TCL interpreted language. Development headers.
 
 %prep
-
-%setup -q -n tls1.5
-%patch0 -p1
+%setup -q -n tls%{version}
+%patch0 -p1 -b .simpleclient
 %patch1 -p1 -b .openssl098a
+%patch2 -p1 -b .rpath
 
 %build
-
-# Fixes AMSN with TCL/TK 8.5: from http://www.amsn-project.net/wiki/FAQ
-# AdamW 2007/06
-perl -pi -e 's,1.5,1.50,g' pkgIndex.tcl.in
-
+autoreconf
 %configure2_5x \
     --enable-shared \
     --enable-static \
@@ -77,16 +53,7 @@ make test
 
 %install
 [ -n "%{buildroot}" -a "%{buildroot}" != / ] && rm -rf %{buildroot}
-
-install -d %{buildroot}%{_libdir}/tls%{major}
-install -d %{buildroot}%{_includedir}/tls%{major}
-
-install -m0755 libtls%{major}.so %{buildroot}%{_libdir}/tls%{major}/
-ln -snf libtls%{major}.so %{buildroot}%{_libdir}/tls%{major}/libtls.so.0
-
-install -m0644 tls.h %{buildroot}%{_includedir}/tls%{major}/
-install -m0644 pkgIndex.tcl %{buildroot}%{_libdir}/tls%{major}/
-install -m0644 tls.tcl %{buildroot}%{_libdir}/tls%{major}/
+%makeinstall_std libdir=%{tcl_sitearch} includedir=%{_includedir}
 
 %if %mdkversion < 200900
 %post -n %{libname} -p /sbin/ldconfig
@@ -99,17 +66,13 @@ install -m0644 tls.tcl %{buildroot}%{_libdir}/tls%{major}/
 %clean
 [ -n "%{buildroot}" -a "%{buildroot}" != / ] && rm -rf %{buildroot}
 
-%files -n %{libname}
+%files
 %defattr(-,root,root)
 %doc ChangeLog README.txt license.terms tls.htm
-%dir %{_libdir}/tls%{major}
-%{_libdir}/tls%{major}/*tcl
-%{_libdir}/tls%{major}/lib*.so.*
-%{_libdir}/tls%{major}/lib*.so
+%{tcl_sitearch}/tls%{version}
 
-%files -n %{libname}-devel
+%files devel
 %defattr(-,root,root)
-%dir %{_includedir}/tls%{major}
-%{_includedir}/tls%{major}/*
+%{_includedir}/tls.h
 
 
