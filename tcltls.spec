@@ -41,27 +41,18 @@ to the TCL interpreted language. Development headers.
 autoreconf
 %configure2_5x \
     --enable-shared \
-    --enable-static \
-    --enable-gcc \
     --with-gcclib \
     --with-ssl-dir=%{_prefix} \
     --with-tcl=%{_libdir}
 
 %make
 
+%check
 make test
 
 %install
 [ -n "%{buildroot}" -a "%{buildroot}" != / ] && rm -rf %{buildroot}
 %makeinstall_std libdir=%{tcl_sitearch} includedir=%{_includedir}
-
-%if %mdkversion < 200900
-%post -n %{libname} -p /sbin/ldconfig
-%endif
-
-%if %mdkversion < 200900
-%postun -n %{libname} -p /sbin/ldconfig
-%endif
 
 %clean
 [ -n "%{buildroot}" -a "%{buildroot}" != / ] && rm -rf %{buildroot}
