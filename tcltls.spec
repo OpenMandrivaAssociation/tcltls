@@ -3,7 +3,7 @@
 Summary: 	SSL2, SSL3, and TLS1 encryption extensions for TCL
 Name: 		tcltls
 Version: 	1.6
-Release: 	3
+Release: 	4
 License: 	BSD
 Group: 		System/Libraries
 URL: 		http://tls.sourceforge.net/
