@@ -6,7 +6,7 @@ Version: 	1.6
 Release: 	4
 License: 	BSD
 Group: 		System/Libraries
-URL: 		http://tls.sourceforge.net/
+URL: 		https://tls.sourceforge.net/
 Source0:		http://downloads.sourceforge.net/tls/tls%{version}-src.tar.gz
 Patch0:		tcltls-1.6-simpleclient.patch
 Patch1:		tcltls-1.6-openssl.patch
