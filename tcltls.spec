@@ -12,6 +12,11 @@ Patch0:		tcltls-1.6-simpleclient.patch
 Patch1:		tcltls-1.6-openssl.patch
 Patch2:		tcltls-1.6-no-rpath.patch
 Patch3:		tcltls-1.6-ciphers.patch
+BuildRequires:	autoconf
+BuildRequires:	automake
+BuildRequires:	libtool-base
+BuildRequires:	slibtool
+BuildRequires:	make
 BuildRequires:	tcl-devel
 BuildRequires:	pkgconfig(openssl)
 Requires:	tcl >= 8.4.11
